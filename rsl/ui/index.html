@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RadioSetLink</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="scene"></div>
+<div class="app">
+  <header class="topbar">
+    <div class="brand">
+      <span class="mark" aria-hidden="true"><i></i></span>
+      <span class="brand-name">RadioSetLink</span>
+      <span class="caption" data-i18n="app.tagline"></span>
+    </div>
+    <div class="topbar-side">
+      <span class="status caption"><span class="status-dot" id="statusDot"></span><span id="status"></span></span>
+      <div class="row" role="group" aria-label="Language">
+        <button type="button" class="button small" data-lang="ru">RU</button>
+        <button type="button" class="button small" data-lang="en">EN</button>
+      </div>
+      <button type="button" class="button main" id="toggle"></button>
+    </div>
+  </header>
+
+  <main class="layout">
+    <aside class="panel side">
+      <section class="flow">
+        <h2 class="title" data-i18n="src.title"></h2>
+        <label class="field">
+          <span class="caption" data-i18n="src.kind"></span>
+          <select id="kind">
+            <option value="hid" data-i18n="src.hid"></option>
+            <option value="crsf" data-i18n="src.crsf"></option>
+          </select>
+        </label>
+        <label class="field">
+          <span class="caption" data-i18n="src.device"></span>
+          <select id="device"></select>
+        </label>
+        <label class="field" id="baudField">
+          <span class="caption" data-i18n="src.baud"></span>
+          <select id="baud"></select>
+        </label>
+        <div class="row">
+          <button type="button" class="button small" id="connect"></button>
+          <button type="button" class="button small" id="refresh" data-i18n="src.refresh"></button>
+        </div>
+        <p class="alert" id="error" hidden></p>
+      </section>
+
+      <section class="flow">
+        <h2 class="title" data-i18n="prof.title"></h2>
+        <label class="field">
+          <span class="caption" data-i18n="prof.list"></span>
+          <select id="profiles"></select>
+        </label>
+        <label class="field">
+          <span class="caption" data-i18n="prof.name"></span>
+          <input type="text" id="name" maxlength="64" autocomplete="off">
+        </label>
+        <div class="row">
+          <button type="button" class="button small" id="save" data-i18n="prof.save"></button>
+          <button type="button" class="button small" id="remove" data-i18n="prof.delete"></button>
+        </div>
+        <span class="caption" id="note"></span>
+        <div class="field">
+          <span class="caption" data-i18n="prof.preset"></span>
+          <div class="row">
+            <button type="button" class="button small" data-preset="2">Mode 2</button>
+            <button type="button" class="button small" data-preset="1">Mode 1</button>
+          </div>
+        </div>
+        <p class="caption" data-i18n="prof.presetHint"></p>
+      </section>
+    </aside>
+
+    <div class="content">
+      <div class="split">
+        <section class="panel block flow">
+          <div class="head">
+            <h2 class="title" data-i18n="in.title"></h2>
+            <div class="row">
+              <button type="button" class="button small" id="calibrate"></button>
+              <button type="button" class="button small" id="calReset" data-i18n="cal.reset"></button>
+            </div>
+          </div>
+          <p class="caption" id="calHint" data-i18n="cal.hint" hidden></p>
+          <p class="text muted" id="inputsEmpty" data-i18n="in.empty"></p>
+          <div class="inputs" id="inputs"></div>
+        </section>
+
+        <section class="panel block flow">
+          <h2 class="title" data-i18n="pad.title"></h2>
+          <div class="pad">
+            <figure class="pad-part">
+              <div class="trigger" id="trigL"><i></i></div>
+              <figcaption class="caption">LT</figcaption>
+            </figure>
+            <figure class="pad-part">
+              <div class="stick" id="stickL"><i></i></div>
+              <figcaption class="caption" data-i18n="pad.left"></figcaption>
+            </figure>
+            <figure class="pad-part">
+              <div class="stick" id="stickR"><i></i></div>
+              <figcaption class="caption" data-i18n="pad.right"></figcaption>
+            </figure>
+            <figure class="pad-part">
+              <div class="trigger" id="trigR"><i></i></div>
+              <figcaption class="caption">RT</figcaption>
+            </figure>
+          </div>
+          <div class="keys" id="keys"></div>
+        </section>
+      </div>
+
+      <section class="panel block flow">
+        <h2 class="title" data-i18n="axes.title"></h2>
+        <div class="scroll">
+          <table class="map">
+            <thead>
+              <tr>
+                <th data-i18n="col.output"></th>
+                <th data-i18n="col.input"></th>
+                <th data-i18n="col.invert"></th>
+                <th data-i18n="col.deadzone"></th>
+                <th data-i18n="col.expo"></th>
+                <th></th>
+                <th data-i18n="col.value"></th>
+              </tr>
+            </thead>
+            <tbody id="axesBody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="panel block flow">
+        <h2 class="title" data-i18n="btns.title"></h2>
+        <div class="scroll">
+          <table class="map">
+            <thead>
+              <tr>
+                <th data-i18n="col.output"></th>
+                <th data-i18n="col.input"></th>
+                <th data-i18n="col.when"></th>
+                <th></th>
+                <th data-i18n="col.state"></th>
+              </tr>
+            </thead>
+            <tbody id="buttonsBody"></tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  </main>
+</div>
+<div class="overlay" id="driver" role="dialog" aria-modal="true" aria-labelledby="driverTitle" hidden>
+  <div class="panel dialog flow">
+    <h2 class="title" id="driverTitle" data-i18n="driver.title"></h2>
+    <p class="text" id="driverText"></p>
+    <div class="meter uni" id="driverProgress" hidden><i></i></div>
+    <div class="actions">
+      <button type="button" class="button" id="driverInstall"></button>
+      <button type="button" class="button-link" id="driverLater"></button>
+    </div>
+  </div>
+</div>
+<script src="i18n.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
