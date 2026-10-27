@@ -5,10 +5,10 @@ from PIL import Image, ImageDraw
 ROOT = Path(__file__).resolve().parent.parent
 OUT = ROOT / "rsl" / "ui" / "logo.ico"
 PREVIEW = Path(__file__).resolve().parent / "logo.png"
-GROUND = (8, 11, 18, 255)
-FRAME = (238, 241, 245, 255)
-CROSS = (92, 96, 104, 255)
-ACCENT = (111, 203, 168, 255)
+GROUND = (14, 14, 14, 255)
+FRAME = (242, 242, 242, 255)
+CROSS = (90, 90, 90, 255)
+ACCENT = (255, 204, 0, 255)
 SIZES = (16, 20, 24, 32, 40, 48, 64, 128, 256)
 
 

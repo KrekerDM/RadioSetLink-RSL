@@ -45,7 +45,10 @@ class TranslationTest(unittest.TestCase):
             "out": ("lx", "ly", "rx", "ry", "lt", "rt", "a", "b", "x", "y", "lb", "rb", "back", "start", "ls", "rs", "up", "down", "left", "right", "guide"),
             "when": ("high", "mid", "low"),
             "err": ("driver", "module", "open", "output"),
-            "driver": ("downloading", "verifying", "installing", "installed", "err.download", "err.signature", "err.cancelled", "err.incomplete"),
+            "driver": ("downloading", "verifying", "installing", "installed", "err.download", "err.signature", "err.cancelled", "err.incomplete", "err.launch"),
+            "fact.driver": ("installed", "missing", "downloading", "verifying", "installing", "failed"),
+            "fact.src": ("idle", "wait", "nosignal", "live"),
+            "kind": ("hid", "crsf"),
         }.items():
             for name in names:
                 self.assertIn(f"{group}.{name}", self.i18n["en"])

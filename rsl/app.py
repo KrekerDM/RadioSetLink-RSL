@@ -23,7 +23,7 @@ def main():
         width=1280,
         height=840,
         min_size=(1040, 680),
-        background_color="#080B12",
+        background_color="#000000",
     )
     try:
         webview.start(icon=str(ICON))

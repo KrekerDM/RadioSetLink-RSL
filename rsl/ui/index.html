@@ -7,163 +7,270 @@
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div class="scene"></div>
 <div class="app">
-  <header class="topbar">
-    <div class="brand">
-      <span class="mark" aria-hidden="true"><i></i></span>
-      <span class="brand-name">RadioSetLink</span>
-      <span class="caption" data-i18n="app.tagline"></span>
-    </div>
-    <div class="topbar-side">
-      <span class="status caption"><span class="status-dot" id="statusDot"></span><span id="status"></span></span>
-      <div class="row" role="group" aria-label="Language">
-        <button type="button" class="button small" data-lang="ru">RU</button>
-        <button type="button" class="button small" data-lang="en">EN</button>
+  <header class="top">
+    <div class="topline">
+      <div class="brand">
+        <svg class="sign" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true">
+          <rect class="s-line" x="3.5" y="3.5" width="17" height="17"/>
+          <rect class="s-accent" x="13" y="6" width="5" height="5"/>
+        </svg>
+        <span class="brand-name">radiosetlink</span>
+        <span class="label" data-i18n="app.tagline"></span>
       </div>
-      <button type="button" class="button main" id="toggle"></button>
+      <div class="row">
+        <div class="lang" role="group" data-i18n-label="lang.label">
+          <button type="button" class="switch" data-lang="ru">ru</button>
+          <button type="button" class="switch" data-lang="en">en</button>
+        </div>
+        <button type="button" class="btn btn-primary" id="toggle" data-i18n="run.start"></button>
+      </div>
     </div>
+    <p class="strip bad" id="error" hidden></p>
+
+    <nav class="modules">
+      <a class="module" href="#source" id="modSource">
+        <svg class="sign" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true">
+          <path class="s-line s-on" d="M4.5 12a7.5 7.5 0 0 1 15 0"/>
+          <path class="s-line s-on" d="M8.5 12a3.5 3.5 0 0 1 7 0"/>
+          <rect class="s-fill" x="11" y="12" width="2" height="9"/>
+        </svg>
+        <b data-i18n="mod.source"></b>
+        <span class="fact" id="factSourceName"></span>
+        <span class="fact state" id="factSourceState"></span>
+      </a>
+      <a class="module" href="#profile" id="modProfile">
+        <svg class="sign" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true">
+          <rect class="s-fill" x="3" y="5" width="18" height="2"/>
+          <rect class="s-fill s-on" x="3" y="11" width="12" height="2"/>
+          <rect class="s-fill" x="3" y="17" width="18" height="2"/>
+        </svg>
+        <b data-i18n="mod.profile"></b>
+        <span class="fact" id="factProfileName"></span>
+        <span class="fact" id="factProfileCal"></span>
+      </a>
+      <a class="module" href="#inputs" id="modInputs">
+        <svg class="sign" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true">
+          <rect class="s-fill" x="4" y="12" width="2" height="9"/>
+          <rect class="s-fill s-on" x="9" y="6" width="2" height="15"/>
+          <rect class="s-fill" x="14" y="9" width="2" height="12"/>
+          <rect class="s-fill" x="19" y="15" width="2" height="6"/>
+        </svg>
+        <b data-i18n="mod.inputs"></b>
+        <span class="fact" id="factInputsAxes"></span>
+        <span class="fact" id="factInputsButtons"></span>
+      </a>
+      <a class="module" href="#pad" id="modPad">
+        <svg class="sign" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true">
+          <rect class="s-line" x="3.5" y="3.5" width="17" height="17"/>
+          <circle class="s-fill s-on" cx="12" cy="12" r="4"/>
+        </svg>
+        <b data-i18n="mod.pad"></b>
+        <span class="fact">xbox 360</span>
+        <span class="fact state" id="factPadState"></span>
+      </a>
+      <a class="module" href="#axes" id="modMap">
+        <svg class="sign" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true">
+          <rect class="s-fill" x="3" y="4" width="4" height="4"/>
+          <rect class="s-fill" x="3" y="16" width="4" height="4"/>
+          <rect class="s-fill" x="17" y="10" width="4" height="4"/>
+          <path class="s-line s-on" d="m7 6 10 6M7 18l10-6"/>
+        </svg>
+        <b data-i18n="mod.map"></b>
+        <span class="fact" id="factMapAxes"></span>
+        <span class="fact" id="factMapButtons"></span>
+      </a>
+      <a class="module" href="#driver-dialog" id="modDriver">
+        <svg class="sign" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true">
+          <path class="s-line" d="M12 3v18"/>
+          <path class="s-line" d="M12 12 4 7"/>
+          <path class="s-line s-on" d="m12 12 8-5"/>
+        </svg>
+        <b data-i18n="mod.driver"></b>
+        <span class="fact">vigembus</span>
+        <span class="fact state" id="factDriverState"></span>
+      </a>
+    </nav>
   </header>
 
-  <main class="layout">
-    <aside class="panel side">
-      <section class="flow">
-        <h2 class="title" data-i18n="src.title"></h2>
-        <label class="field">
-          <span class="caption" data-i18n="src.kind"></span>
-          <select id="kind">
-            <option value="hid" data-i18n="src.hid"></option>
-            <option value="crsf" data-i18n="src.crsf"></option>
-          </select>
-        </label>
-        <label class="field">
-          <span class="caption" data-i18n="src.device"></span>
-          <select id="device"></select>
-        </label>
-        <label class="field" id="baudField">
-          <span class="caption" data-i18n="src.baud"></span>
-          <select id="baud"></select>
-        </label>
-        <div class="row">
-          <button type="button" class="button small" id="connect"></button>
-          <button type="button" class="button small" id="refresh" data-i18n="src.refresh"></button>
-        </div>
-        <p class="alert" id="error" hidden></p>
-      </section>
-
-      <section class="flow">
-        <h2 class="title" data-i18n="prof.title"></h2>
-        <label class="field">
-          <span class="caption" data-i18n="prof.list"></span>
-          <select id="profiles"></select>
-        </label>
-        <label class="field">
-          <span class="caption" data-i18n="prof.name"></span>
-          <input type="text" id="name" maxlength="64" autocomplete="off">
-        </label>
-        <div class="row">
-          <button type="button" class="button small" id="save" data-i18n="prof.save"></button>
-          <button type="button" class="button small" id="remove" data-i18n="prof.delete"></button>
-        </div>
-        <span class="caption" id="note"></span>
-        <div class="field">
-          <span class="caption" data-i18n="prof.preset"></span>
-          <div class="row">
-            <button type="button" class="button small" data-preset="2">Mode 2</button>
-            <button type="button" class="button small" data-preset="1">Mode 1</button>
-          </div>
-        </div>
-        <p class="caption" data-i18n="prof.presetHint"></p>
-      </section>
-    </aside>
-
-    <div class="content">
-      <div class="split">
-        <section class="panel block flow">
-          <div class="head">
-            <h2 class="title" data-i18n="in.title"></h2>
-            <div class="row">
-              <button type="button" class="button small" id="calibrate"></button>
-              <button type="button" class="button small" id="calReset" data-i18n="cal.reset"></button>
-            </div>
-          </div>
-          <p class="caption" id="calHint" data-i18n="cal.hint" hidden></p>
-          <p class="text muted" id="inputsEmpty" data-i18n="in.empty"></p>
-          <div class="inputs" id="inputs"></div>
-        </section>
-
-        <section class="panel block flow">
-          <h2 class="title" data-i18n="pad.title"></h2>
-          <div class="pad">
-            <figure class="pad-part">
-              <div class="trigger" id="trigL"><i></i></div>
-              <figcaption class="caption">LT</figcaption>
-            </figure>
-            <figure class="pad-part">
-              <div class="stick" id="stickL"><i></i></div>
-              <figcaption class="caption" data-i18n="pad.left"></figcaption>
-            </figure>
-            <figure class="pad-part">
-              <div class="stick" id="stickR"><i></i></div>
-              <figcaption class="caption" data-i18n="pad.right"></figcaption>
-            </figure>
-            <figure class="pad-part">
-              <div class="trigger" id="trigR"><i></i></div>
-              <figcaption class="caption">RT</figcaption>
-            </figure>
-          </div>
-          <div class="keys" id="keys"></div>
-        </section>
+  <main class="sheet" id="sheet">
+    <section class="band" id="source">
+      <div class="side">
+        <span class="index">·<b>01</b></span>
+        <p class="label" data-i18n="src.title"></p>
       </div>
-
-      <section class="panel block flow">
-        <h2 class="title" data-i18n="axes.title"></h2>
-        <div class="scroll">
-          <table class="map">
-            <thead>
-              <tr>
-                <th data-i18n="col.output"></th>
-                <th data-i18n="col.input"></th>
-                <th data-i18n="col.invert"></th>
-                <th data-i18n="col.deadzone"></th>
-                <th data-i18n="col.expo"></th>
-                <th></th>
-                <th data-i18n="col.value"></th>
-              </tr>
-            </thead>
-            <tbody id="axesBody"></tbody>
-          </table>
+      <div class="flow">
+        <div class="fields">
+          <label class="field">
+            <span class="label" data-i18n="src.kind"></span>
+            <select id="kind">
+              <option value="hid" data-i18n="src.hid"></option>
+              <option value="crsf" data-i18n="src.crsf"></option>
+            </select>
+          </label>
+          <label class="field">
+            <span class="label" data-i18n="src.device"></span>
+            <select id="device"></select>
+          </label>
+          <label class="field" id="baudField">
+            <span class="label" data-i18n="src.baud"></span>
+            <select id="baud" class="num"></select>
+          </label>
         </div>
-      </section>
-
-      <section class="panel block flow">
-        <h2 class="title" data-i18n="btns.title"></h2>
-        <div class="scroll">
-          <table class="map">
-            <thead>
-              <tr>
-                <th data-i18n="col.output"></th>
-                <th data-i18n="col.input"></th>
-                <th data-i18n="col.when"></th>
-                <th></th>
-                <th data-i18n="col.state"></th>
-              </tr>
-            </thead>
-            <tbody id="buttonsBody"></tbody>
-          </table>
+        <div class="row">
+          <button type="button" class="btn" id="connect" data-i18n="src.connect"></button>
+          <button type="button" class="quiet" id="refresh" data-i18n="src.refresh"></button>
         </div>
-      </section>
-    </div>
+      </div>
+    </section>
+
+    <section class="band" id="profile">
+      <div class="side">
+        <span class="index">·<b>02</b></span>
+        <p class="label" data-i18n="prof.title"></p>
+      </div>
+      <div class="flow">
+        <div class="fields">
+          <label class="field">
+            <span class="label" data-i18n="prof.list"></span>
+            <select id="profiles"></select>
+          </label>
+          <label class="field">
+            <span class="label" data-i18n="prof.name"></span>
+            <input type="text" id="name" maxlength="64" autocomplete="off">
+          </label>
+        </div>
+        <div class="row">
+          <button type="button" class="btn" id="save" data-i18n="prof.save"></button>
+          <button type="button" class="quiet" id="remove" data-i18n="prof.delete"></button>
+          <span class="small" id="note"></span>
+        </div>
+        <div class="fields">
+          <label class="field">
+            <span class="label" data-i18n="prof.preset"></span>
+            <select id="preset">
+              <option value="2" data-i18n="prof.mode2"></option>
+              <option value="1" data-i18n="prof.mode1"></option>
+            </select>
+          </label>
+          <div class="field end">
+            <button type="button" class="btn" id="applyPreset" data-i18n="prof.apply"></button>
+          </div>
+        </div>
+        <p class="small prose" data-i18n="prof.presetHint"></p>
+      </div>
+    </section>
+
+    <section class="band" id="inputs">
+      <div class="side">
+        <span class="index">·<b>03</b></span>
+        <p class="label" data-i18n="in.title"></p>
+      </div>
+      <div class="flow">
+        <div class="row">
+          <button type="button" class="btn" id="calibrate" data-i18n="cal.start"></button>
+          <button type="button" class="quiet" id="calReset" data-i18n="cal.reset"></button>
+        </div>
+        <p class="small prose" id="calHint" data-i18n="cal.hint" hidden></p>
+        <p class="empty" id="inputsEmpty" data-i18n="in.empty"></p>
+        <div class="inputs" id="inputs-list"></div>
+      </div>
+    </section>
+
+    <section class="band" id="pad">
+      <div class="side">
+        <span class="index">·<b>04</b></span>
+        <p class="label" data-i18n="pad.title"></p>
+      </div>
+      <div class="pad-view">
+        <div class="pad">
+          <figure class="pad-part">
+            <div class="trigger" id="trigL"><i></i></div>
+            <figcaption class="label">lt</figcaption>
+          </figure>
+          <figure class="pad-part">
+            <div class="stick" id="stickL"><i></i></div>
+            <figcaption class="label" data-i18n="pad.left"></figcaption>
+          </figure>
+          <figure class="pad-part">
+            <div class="stick" id="stickR"><i></i></div>
+            <figcaption class="label" data-i18n="pad.right"></figcaption>
+          </figure>
+          <figure class="pad-part">
+            <div class="trigger" id="trigR"><i></i></div>
+            <figcaption class="label">rt</figcaption>
+          </figure>
+        </div>
+        <div class="keys" id="keys"></div>
+      </div>
+    </section>
+
+    <section class="band" id="axes">
+      <div class="side">
+        <span class="index">·<b>05</b></span>
+        <p class="label" data-i18n="axes.title"></p>
+      </div>
+      <div class="scroll">
+        <table class="table">
+          <thead>
+            <tr>
+              <th data-i18n="col.output"></th>
+              <th data-i18n="col.input"></th>
+              <th data-i18n="col.invert"></th>
+              <th data-i18n="col.deadzone"></th>
+              <th data-i18n="col.expo"></th>
+              <th></th>
+              <th data-i18n="col.value"></th>
+            </tr>
+          </thead>
+          <tbody id="axesBody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="band" id="buttons">
+      <div class="side">
+        <span class="index">·<b>06</b></span>
+        <p class="label" data-i18n="btns.title"></p>
+      </div>
+      <div class="scroll">
+        <table class="table">
+          <thead>
+            <tr>
+              <th data-i18n="col.output"></th>
+              <th data-i18n="col.input"></th>
+              <th data-i18n="col.when"></th>
+              <th></th>
+              <th data-i18n="col.state"></th>
+            </tr>
+          </thead>
+          <tbody id="buttonsBody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <footer class="foot">
+      <p class="small"><span>radiosetlink</span> <span class="num" id="version"></span> · <span data-i18n="foot.profiles"></span> <span class="mono">%appdata%\radiosetlink</span></p>
+    </footer>
   </main>
 </div>
-<div class="overlay" id="driver" role="dialog" aria-modal="true" aria-labelledby="driverTitle" hidden>
-  <div class="panel dialog flow">
-    <h2 class="title" id="driverTitle" data-i18n="driver.title"></h2>
-    <p class="text" id="driverText"></p>
+
+<div class="overlay" id="driver-dialog" role="dialog" aria-modal="true" aria-labelledby="driverTitle" hidden>
+  <div class="dialog flow">
+    <h2 class="h2" id="driverTitle" data-i18n="driver.title"></h2>
+    <p class="prose" id="driverText"></p>
+    <dl class="cond" id="driverCond">
+      <dt data-i18n="cond.requires">требует</dt>
+      <dd><span data-i18n="driver.requires"></span><span class="cond-check">start-process -verb runas</span></dd>
+      <dt data-i18n="cond.costs">стоит</dt>
+      <dd><span data-i18n="driver.costs"></span><span class="cond-check" id="driverFile"></span></dd>
+      <dt data-i18n="cond.doesNot">не делает</dt>
+      <dd><span data-i18n="driver.doesNot"></span><span class="cond-check">get-authenticodesignature</span></dd>
+    </dl>
     <div class="meter uni" id="driverProgress" hidden><i></i></div>
-    <div class="actions">
-      <button type="button" class="button" id="driverInstall"></button>
-      <button type="button" class="button-link" id="driverLater"></button>
+    <div class="row">
+      <button type="button" class="btn btn-primary" id="driverInstall" data-i18n="driver.install"></button>
+      <button type="button" class="quiet" id="driverLater" data-i18n="driver.later"></button>
     </div>
   </div>
 </div>

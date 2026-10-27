@@ -162,17 +162,25 @@ def main():
         image.save(DOCS / name, optimize=True)
         print(f"{name}: {image.width}x{image.height}")
 
+    def social():
+        image = Image.open(DOCS / "screenshot-main.png")
+        width = image.width
+        height = width // 2
+        image.crop((0, 0, width, height)).resize((1280, 640), Image.LANCZOS).save(DOCS / "social-preview.png", optimize=True)
+        print("social-preview.png: 1280x640")
+
     def scenario():
         time.sleep(5)
         engine.set_output(True)
         time.sleep(1.5)
         for lang, suffix in (("ru", ""), ("en", "-en")):
             window.evaluate_js(f"document.querySelector('[data-lang={lang}]').click()")
-            window.evaluate_js("document.querySelector('.content').scrollTop = 0")
+            window.evaluate_js("document.querySelector('.sheet').scrollTop = 0")
             shot(f"screenshot-main{suffix}.png")
-            window.evaluate_js("document.querySelector('.content').scrollTop = document.querySelector('.content > section').offsetTop - 16")
+            window.evaluate_js("document.querySelector('.sheet').scrollTop = document.getElementById('axes').offsetTop - document.querySelector('.sheet').offsetTop")
             shot(f"screenshot-mapping{suffix}.png")
-            window.evaluate_js("document.querySelector('.content').scrollTop = 0")
+            window.evaluate_js("document.querySelector('.sheet').scrollTop = 0")
+            engine.set_output(False)
             driver.installed = lambda: False
             installer.stage = "missing"
             window.evaluate_js("openDriver(true)")
@@ -180,6 +188,9 @@ def main():
             driver.installed = detected
             installer.stage = "installed"
             window.evaluate_js("openDriver(false)")
+            engine.set_output(True)
+            time.sleep(0.5)
+        social()
         window.destroy()
 
     threading.Thread(target=scenario, daemon=True).start()

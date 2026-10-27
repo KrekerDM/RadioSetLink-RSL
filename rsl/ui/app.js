@@ -1,19 +1,24 @@
 const AXES = ["lx", "ly", "rx", "ry", "lt", "rt"];
 const TRIGGERS = ["lt", "rt"];
 const BUTTONS = ["a", "b", "x", "y", "lb", "rb", "back", "start", "ls", "rs", "up", "down", "left", "right", "guide"];
-const KEY_LABELS = { a: "A", b: "B", x: "X", y: "Y", lb: "LB", rb: "RB", back: "Back", start: "Start", ls: "LS", rs: "RS", up: "↑", down: "↓", left: "←", right: "→", guide: "Guide" };
+const KEY_LABELS = { a: "a", b: "b", x: "x", y: "y", lb: "lb", rb: "rb", back: "back", start: "start", ls: "ls", rs: "rs", guide: "guide" };
+const ARROWS = { up: "M6 2 11 10H1z", down: "M6 10 1 2h10z", left: "M2 6 10 1v10z", right: "M10 6 2 11V1z" };
 const CONDITIONS = ["high", "mid", "low"];
 const BAUDS = [420000, 416666, 400000, 115200];
 const POLL_MS = 33;
+const CONFIRM_MS = 3000;
 const DRIVER_BUSY = ["downloading", "verifying", "installing"];
+const OUTPUT_ERRORS = ["driver", "module", "output"];
+const SVG = "http://www.w3.org/2000/svg";
 
 const $ = (id) => document.getElementById(id);
 const api = () => window.pywebview.api;
 
 const app = {
-  lang: "en",
+  lang: navigator.language.toLowerCase().startsWith("ru") ? "ru" : "en",
   profile: null,
   name: "",
+  dirty: false,
   profiles: [],
   ports: [],
   state: null,
@@ -21,12 +26,26 @@ const app = {
   deviceKey: "",
   listen: null,
   noteTimer: 0,
+  removeTimer: 0,
+  removeArmed: false,
   driverOpen: false,
+  lastFocus: null,
 };
 
 function t(key, vars = {}) {
   const text = I18N[app.lang]?.[key] ?? I18N.en[key] ?? key;
   return text.replace(/\{(\w+)\}/g, (_, name) => vars[name] ?? "");
+}
+
+function count(n, key) {
+  const forms = t(key).split("|");
+  let index = n === 1 ? 0 : 1;
+  if (app.lang === "ru") {
+    const tens = n % 100;
+    const ones = n % 10;
+    index = ones === 1 && tens !== 11 ? 0 : ones >= 2 && ones <= 4 && (tens < 12 || tens > 14) ? 1 : 2;
+  }
+  return `${n} ${forms[Math.min(index, forms.length - 1)]}`;
 }
 
 function node(tag, props = {}, children = []) {
@@ -40,6 +59,26 @@ function node(tag, props = {}, children = []) {
   }
   element.append(...[].concat(children).filter((child) => child != null));
   return element;
+}
+
+function arrow(key) {
+  const svg = document.createElementNS(SVG, "svg");
+  svg.setAttribute("width", "12");
+  svg.setAttribute("height", "12");
+  svg.setAttribute("viewBox", "0 0 12 12");
+  svg.setAttribute("aria-hidden", "true");
+  const path = document.createElementNS(SVG, "path");
+  path.setAttribute("d", ARROWS[key]);
+  svg.append(path);
+  return svg;
+}
+
+function setFact(id, text) {
+  const element = $(id);
+  if (element.dataset.text === text) return;
+  element.dataset.text = text;
+  element.title = text;
+  element.replaceChildren(...text.split(/(\d+(?:[.,]\d+)?)/).filter(Boolean).map((part) => (/^\d/.test(part) ? node("span", { class: "num", text: part }) : document.createTextNode(part))));
 }
 
 function inputLabel(id) {
@@ -73,6 +112,7 @@ function setMeter(element, value, unipolar) {
 }
 
 function push() {
+  app.dirty = true;
   api().set_profile(app.profile);
 }
 
@@ -105,7 +145,7 @@ function inputSelect(cfg) {
 }
 
 function percentInput(cfg, field, max) {
-  return node("input", {
+  const input = node("input", {
     type: "number",
     min: 0,
     max,
@@ -118,12 +158,13 @@ function percentInput(cfg, field, max) {
       push();
     },
   });
+  return node("span", { class: "with-unit" }, [input, node("span", { class: "unit", text: "%" })]);
 }
 
 function assignButton(group, key) {
   return node("button", {
     type: "button",
-    class: "button small",
+    class: "btn compact",
     "data-listen": `${group}:${key}`,
     "aria-pressed": "false",
     text: t("map.assign"),
@@ -149,7 +190,7 @@ function axisRow(key) {
     node("td", {}, percentInput(cfg, "dz", 50)),
     node("td", {}, percentInput(cfg, "expo", 100)),
     node("td", {}, assignButton("axes", key)),
-    node("td", {}, meter(unipolar)),
+    node("td", {}, [meter(unipolar), node("span", { class: "value" })]),
   ]);
 }
 
@@ -178,7 +219,7 @@ function buildMapping() {
 }
 
 function buildKeys() {
-  $("keys").replaceChildren(...BUTTONS.map((key) => node("span", { class: "key", "data-pad": key, text: KEY_LABELS[key] })));
+  $("keys").replaceChildren(...BUTTONS.map((key) => node("span", { class: "key", "data-pad": key, title: t(`out.${key}`) }, ARROWS[key] ? arrow(key) : KEY_LABELS[key])));
 }
 
 function buildInputs(force) {
@@ -186,8 +227,8 @@ function buildInputs(force) {
   const key = ids.join(",");
   if (!force && key === app.inputKeys) return false;
   app.inputKeys = key;
-  $("inputs").replaceChildren(...ids.map((id) => node("div", { class: "input-row", "data-id": id }, [
-    node("span", { class: "caption", text: inputLabel(id) }),
+  $("inputs-list").replaceChildren(...ids.map((id) => node("div", { class: "input-row", "data-id": id }, [
+    node("span", { class: "label", text: inputLabel(id) }),
     id.startsWith("b") ? node("span", { class: "ind" }) : meter(false),
     node("span", { class: "value" }),
   ])));
@@ -219,12 +260,19 @@ function renderProfiles() {
   );
   select.value = app.profiles.includes(app.name) ? app.name : "";
   $("remove").disabled = !app.name;
+  disarmRemove();
+}
+
+function applyText() {
+  document.documentElement.lang = app.lang;
+  document.querySelectorAll("[data-i18n]").forEach((element) => (element.textContent = t(element.dataset.i18n)));
+  document.querySelectorAll("[data-i18n-label]").forEach((element) => element.setAttribute("aria-label", t(element.dataset.i18nLabel)));
+  document.querySelectorAll("[data-lang]").forEach((button) => button.setAttribute("aria-pressed", String(button.dataset.lang === app.lang)));
 }
 
 function applyI18n() {
-  document.documentElement.lang = app.lang;
-  document.querySelectorAll("[data-i18n]").forEach((element) => (element.textContent = t(element.dataset.i18n)));
-  document.querySelectorAll("[data-lang]").forEach((button) => button.setAttribute("aria-pressed", String(button.dataset.lang === app.lang)));
+  applyText();
+  buildKeys();
   buildMapping();
   buildInputs(true);
   fillDevices(true);
@@ -270,9 +318,19 @@ function detect(values) {
 }
 
 function openDriver(open) {
+  if (open === app.driverOpen) return;
   app.driverOpen = open;
-  $("driver").hidden = !open;
-  if (open && app.state) renderDriver(app.state.driver);
+  $("driver-dialog").hidden = !open;
+  document.querySelector(".app").inert = open;
+  if (open) {
+    app.lastFocus = document.activeElement;
+    if (app.state) renderDriver(app.state.driver);
+    const target = $("driverInstall").hidden ? $("driverLater") : $("driverInstall");
+    target.focus();
+  } else if (app.lastFocus) {
+    app.lastFocus.focus();
+    app.lastFocus = null;
+  }
 }
 
 function renderDriver(driver) {
@@ -283,7 +341,10 @@ function renderDriver(driver) {
   if (busy) text = t(`driver.${stage}`, { p: Math.round(driver.progress * 100) });
   if (stage === "installed") text = t("driver.installed");
   if (stage === "failed") text = t(`driver.err.${driver.error}`);
+  $("driverTitle").textContent = t(stage === "installed" ? "driver.titleReady" : "driver.title");
   $("driverText").textContent = text;
+  $("driverFile").textContent = driver.file ?? "";
+  $("driverCond").hidden = busy || stage === "installed";
   $("driverProgress").hidden = stage !== "downloading";
   setMeter($("driverProgress"), driver.progress, true);
   $("driverInstall").hidden = busy || stage === "installed";
@@ -292,16 +353,54 @@ function renderDriver(driver) {
   $("driverLater").textContent = t(stage === "installed" ? "driver.done" : "driver.later");
 }
 
-function statusLevel(state) {
-  if (state.source?.signal) return "live";
+function sourceLevel(state) {
+  if (state.source) return state.source.signal ? "live" : "nosignal";
   return state.target ? "wait" : "idle";
 }
 
-function statusText(state) {
-  let text = t("status.idle");
-  if (state.target && !state.source) text = t("status.waiting");
-  if (state.source) text = state.source.signal ? t("status.connected", { name: state.source.name }) : t("status.nosignal");
-  return state.output ? `${text} · ${t("status.output")}` : text;
+function setModule(id, on, bad, facts) {
+  $(id).dataset.on = String(on);
+  $(id).dataset.bad = String(bad);
+  for (const [field, text] of Object.entries(facts)) setFact(field, text);
+}
+
+function renderModules(state) {
+  const level = sourceLevel(state);
+  const kind = state.source?.kind ?? state.target?.kind ?? $("kind").value;
+  const name = state.source ? `${t(`kind.${kind}`)} · ${state.source.name}` : t(`kind.${kind}`);
+  setModule("modSource", level === "live", level === "nosignal", { factSourceName: name, factSourceState: t(`fact.src.${level}`) });
+
+  const calibrated = Object.keys(app.profile?.cal ?? {}).length;
+  const profileName = app.name ? (app.dirty ? `${app.name} · ${t("prof.changed")}` : app.name) : t("prof.unsaved");
+  setModule("modProfile", Boolean(app.name) && !app.dirty, false, {
+    factProfileName: profileName,
+    factProfileCal: t("fact.cal", { n: count(calibrated, "unit.channels") }),
+  });
+
+  const ids = inputIds();
+  const axes = ids.filter((id) => id.startsWith("a") || id.startsWith("c")).length;
+  const buttons = ids.filter((id) => id.startsWith("b")).length;
+  const hats = ids.filter((id) => id.startsWith("h")).length / 2;
+  const buttonLine = hats ? `${count(buttons, "unit.buttons")} · ${count(hats, "unit.hats")}` : count(buttons, "unit.buttons");
+  setModule("modInputs", ids.length > 0, false, {
+    factInputsAxes: count(axes, kind === "crsf" ? "unit.channels" : "unit.axes"),
+    factInputsButtons: buttonLine,
+  });
+
+  const outputError = OUTPUT_ERRORS.includes(state.error);
+  setModule("modPad", state.output, outputError, { factPadState: t(state.output ? "fact.pad.on" : outputError ? "fact.pad.error" : "fact.pad.off") });
+
+  const mappedAxes = AXES.filter((key) => app.profile?.axes[key].in).length;
+  const mappedButtons = BUTTONS.filter((key) => app.profile?.buttons[key].in).length;
+  setModule("modMap", mappedAxes + mappedButtons > 0, false, {
+    factMapAxes: t("fact.map.axes", { n: mappedAxes, total: AXES.length }),
+    factMapButtons: t("fact.map.buttons", { n: mappedButtons, total: BUTTONS.length }),
+  });
+
+  const driver = state.driver ?? { stage: "installed", progress: 0 };
+  setModule("modDriver", driver.stage === "installed", driver.stage === "failed", {
+    factDriverState: t(`fact.driver.${driver.stage}`, { p: Math.round(driver.progress * 100) }),
+  });
 }
 
 function render() {
@@ -309,7 +408,7 @@ function render() {
   if (buildInputs(false)) document.querySelectorAll(".input-select").forEach((select) => fillInputOptions(select, select.value));
   fillDevices(false);
 
-  for (const row of $("inputs").children) {
+  for (const row of $("inputs-list").children) {
     const value = state.values[row.dataset.id] ?? 0;
     const [, level, text] = row.children;
     if (level.classList.contains("ind")) {
@@ -322,7 +421,9 @@ function render() {
   }
   for (const row of $("axesBody").children) {
     const key = row.dataset.axis;
-    setMeter(row.querySelector(".meter"), state.axes[key] ?? 0, TRIGGERS.includes(key));
+    const value = state.axes[key] ?? 0;
+    setMeter(row.querySelector(".meter"), value, TRIGGERS.includes(key));
+    row.querySelector(".value").textContent = value.toFixed(2);
   }
   for (const row of $("buttonsBody").children) {
     row.querySelector(".ind").classList.toggle("on", Boolean(state.buttons[row.dataset.button]));
@@ -338,8 +439,7 @@ function render() {
   $("trigL").firstChild.style.height = `${state.axes.lt * 100}%`;
   $("trigR").firstChild.style.height = `${state.axes.rt * 100}%`;
 
-  $("status").textContent = statusText(state);
-  $("statusDot").dataset.level = statusLevel(state);
+  renderModules(state);
   $("toggle").textContent = t(state.output ? "run.stop" : "run.start");
   $("connect").textContent = t(state.target ? "src.disconnect" : "src.connect");
   $("kind").disabled = Boolean(state.target);
@@ -367,10 +467,34 @@ async function loop() {
   }
 }
 
-function setProfile(profile) {
+function setProfile(profile, dirty) {
   app.profile = profile;
+  app.dirty = dirty;
   app.listen = null;
   buildMapping();
+}
+
+function disarmRemove() {
+  clearTimeout(app.removeTimer);
+  app.removeArmed = false;
+  $("remove").dataset.armed = "false";
+  $("remove").textContent = t("prof.delete");
+}
+
+async function removeProfile() {
+  if (!app.name) return;
+  if (!app.removeArmed) {
+    app.removeArmed = true;
+    $("remove").dataset.armed = "true";
+    $("remove").textContent = t("prof.confirmDelete", { name: app.name });
+    app.removeTimer = setTimeout(disarmRemove, CONFIRM_MS);
+    return;
+  }
+  app.profiles = await api().delete_profile(app.name);
+  app.name = "";
+  app.dirty = true;
+  renderProfiles();
+  flash(t("prof.deleted"));
 }
 
 function wire() {
@@ -390,6 +514,10 @@ function wire() {
 
   $("driverInstall").addEventListener("click", () => api().install_driver());
   $("driverLater").addEventListener("click", () => openDriver(false));
+  $("modDriver").addEventListener("click", (event) => {
+    event.preventDefault();
+    openDriver(true);
+  });
 
   $("kind").addEventListener("change", async () => {
     if ($("kind").value === "crsf") app.ports = await api().ports();
@@ -418,7 +546,7 @@ function wire() {
     if (!profile) return;
     app.name = name;
     $("name").value = name;
-    setProfile(profile);
+    setProfile(profile, false);
     renderProfiles();
   });
 
@@ -427,31 +555,26 @@ function wire() {
     const result = await api().save_profile(name, app.profile);
     if (!result.name) return;
     app.name = result.name;
+    app.dirty = false;
     app.profiles = result.profiles;
     $("name").value = result.name;
     renderProfiles();
     flash(t("prof.saved"));
   });
 
-  $("remove").addEventListener("click", async () => {
-    if (!app.name) return;
-    app.profiles = await api().delete_profile(app.name);
-    app.name = "";
-    renderProfiles();
-    flash(t("prof.deleted"));
+  $("remove").addEventListener("click", removeProfile);
+
+  $("applyPreset").addEventListener("click", async () => {
+    const kind = app.state?.source?.kind ?? $("kind").value;
+    setProfile(await api().preset(Number($("preset").value), kind), true);
   });
 
-  document.querySelectorAll("[data-preset]").forEach((button) => button.addEventListener("click", async () => {
-    const kind = app.state?.source?.kind ?? $("kind").value;
-    setProfile(await api().preset(Number(button.dataset.preset), kind));
-  }));
-
   $("calibrate").addEventListener("click", async () => {
-    if (app.state?.calibrating) setProfile(await api().calibrate_end());
+    if (app.state?.calibrating) setProfile(await api().calibrate_end(), true);
     else api().calibrate_begin();
   });
 
-  $("calReset").addEventListener("click", async () => setProfile(await api().calibrate_reset()));
+  $("calReset").addEventListener("click", async () => setProfile(await api().calibrate_reset(), true));
 
   document.addEventListener("keydown", (event) => {
     if (event.key === "Escape" && app.driverOpen && !DRIVER_BUSY.includes(app.state?.driver?.stage)) {
@@ -467,10 +590,13 @@ function wire() {
 
 async function boot() {
   const data = await api().boot();
-  app.lang = data.lang || (navigator.language.toLowerCase().startsWith("ru") ? "ru" : "en");
+  app.lang = data.lang || app.lang;
   app.profile = data.profile;
   app.name = data.name;
   app.profiles = data.profiles;
+  applyText();
+  $("version").textContent = data.version;
+  $("name").value = data.name;
   app.ports = await api().ports();
   app.state = await api().state();
   wire();
@@ -478,12 +604,12 @@ async function boot() {
     $("kind").value = data.source.kind;
     $("baud").value = String(data.source.baud);
   }
-  $("name").value = data.name;
-  buildKeys();
   applyI18n();
   if (app.state.driver.stage !== "installed") openDriver(true);
   loop();
 }
+
+applyText();
 
 if (window.pywebview?.api?.boot) boot();
 else window.addEventListener("pywebviewready", boot, { once: true });

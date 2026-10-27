@@ -59,7 +59,7 @@ class Installer:
         with self.lock:
             if self.stage in ("missing", "failed") and installed():
                 self.stage = "installed"
-            return {"stage": self.stage, "progress": self.progress, "error": self.error}
+            return {"stage": self.stage, "progress": self.progress, "error": self.error, "file": FILENAME}
 
     def start(self):
         with self.lock:
@@ -77,6 +77,10 @@ class Installer:
     def run(self):
         try:
             path = BUNDLED if BUNDLED.exists() else self.download()
+        except OSError:
+            self.fail("download")
+            return
+        try:
             self.set_stage("verifying")
             if not trusted(path):
                 raise InstallError("signature")
@@ -90,7 +94,7 @@ class Installer:
         except InstallError as error:
             self.fail(str(error))
         except OSError:
-            self.fail("download")
+            self.fail("launch")
 
     def download(self):
         folder = Path(tempfile.gettempdir()) / "RadioSetLink"

@@ -1,4 +1,4 @@
-from . import mapping
+from . import __version__, mapping
 from .sources import serial_ports
 
 LANGUAGES = ("ru", "en")
@@ -33,7 +33,7 @@ class Api:
         if target:
             self._engine.set_target(target)
         lang = settings.get("lang") if settings.get("lang") in LANGUAGES else ""
-        return {"lang": lang, "profile": profile, "name": name, "profiles": self._store.profiles(), "source": target}
+        return {"lang": lang, "profile": profile, "name": name, "profiles": self._store.profiles(), "source": target, "version": __version__}
 
     def state(self):
         state = self._engine.snapshot()

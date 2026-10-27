@@ -1,46 +1,79 @@
-Первая версия. Программа для Windows, которая превращает пульт дрона или FPV-аппаратуру в геймпад Xbox 360 — для игр и симуляторов, которые не видят пульт напрямую.
+Новый вид и исправления по итогам проверки. Логика работы с пультом и драйвером
+не менялась, профили из 1.0.0 подхватываются.
 
-## Возможности
+## Изменено
 
-- **Два источника** — пульт в режиме USB Joystick (EdgeTX, OpenTX и другие) и приёмник ExpressLRS или Crossfire по CRSF через COM-порт.
-- **Раскладка** — шаблоны Mode 2 и Mode 1, назначение канала движением стика, инверсия, мёртвая зона и экспо для каждой оси.
-- **Тумблеры как кнопки** — верхнее, среднее или нижнее положение.
-- **Калибровка и профили** — крайние положения сохраняются, под каждый пульт свой профиль.
-- **Живой просмотр** — каналы пульта рядом с тем, что получает геймпад, индикатор сигнала в шапке.
-- **Установка драйвера из программы** — если ViGEmBus нет, программа предложит его поставить: установщик уже внутри exe, перед запуском проверяется его цифровая подпись.
-- **Русский и английский** интерфейс.
+- **Тема module из стандарта Lodd** — плоский чёрный фон без фотографии и
+  стекла, один жёлтый акцент `#ffcc00`, шрифт Jost в начертаниях 200 и 300,
+  строчные буквы. Худший контраст текста 5.14:1 при норме WCAG AA 4.5:1.
+- **Ряд модулей под шапкой** — источник, профиль, каналы, геймпад, раскладка и
+  драйвер с текущими числами. Отклонение вроде «нет сигнала» помечено отдельным
+  цветом, щелчок по модулю ведёт к его разделу.
+- **Разделы с номерами 01–06** вместо карточек.
+- **Шаблон Mode 2 или Mode 1** выбирается в списке и применяется кнопкой. Под
+  списком сказано, что остальная раскладка при этом сбрасывается.
+- **Удаление профиля** просит второе нажатие в течение 3 секунд.
+- **Профиль с несохранёнными правками** помечен словом «изменён».
+- **Значение каждой оси** видно числом рядом со столбиком, у мёртвой зоны и
+  экспо стоит знак процента.
+
+## Исправлено
+
+- Ошибка запуска геймпада раньше печаталась в разделе 01, вне экрана. Теперь
+  она стоит под шапкой.
+- Окно драйвера при установленном драйвере писало в заголовке, что драйвер
+  нужен.
+- Сбой запуска установщика раньше выдавался за ошибку загрузки.
 
 ## Установка
 
-Скачайте `RadioSetLink.exe` и запустите — Python и библиотеки не нужны. Профили и настройки хранятся в `%APPDATA%\RadioSetLink`.
+Скачайте `RadioSetLink.exe` и запустите, Python и библиотеки не нужны. Профили
+и настройки хранятся в `%APPDATA%\RadioSetLink`.
 
-При первом запуске программа проверит драйвер ViGEmBus и, если его нет, предложит установить. Windows попросит права администратора.
+Windows SmartScreen может предупредить о неизвестном издателе, потому что
+сборка не подписана сертификатом. «Подробнее» → «Выполнить в любом случае».
 
-Windows SmartScreen может предупредить о неизвестном издателе: сборка не подписана сертификатом. «Подробнее» → «Выполнить в любом случае».
-
-**Требования:** Windows 10 или 11, 64 бита, Microsoft Edge WebView2 Runtime (в Windows 11 уже есть).
+Нужны Windows 10 или 11, 64 бита, и Microsoft Edge WebView2 Runtime, в
+Windows 11 он уже есть.
 
 ---
 ## English
 
-First release. A Windows app that turns a drone or FPV radio into an Xbox 360 gamepad, for games and simulators that do not see a radio directly.
+A new look and fixes from a review pass. Radio and driver handling did not
+change, and profiles from 1.0.0 carry over.
 
-## Features
+## Changed
 
-- **Two sources** — a radio in USB Joystick mode (EdgeTX, OpenTX and others) and an ExpressLRS or Crossfire receiver over CRSF on a COM port.
-- **Mapping** — Mode 2 and Mode 1 presets, assign a channel by moving the stick, invert, deadzone and expo per axis.
-- **Switches as buttons** — high, middle or low position.
-- **Calibration and profiles** — end points are stored, one profile per radio.
-- **Live view** — radio channels next to what the gamepad receives, a signal indicator in the header.
-- **Driver setup from the app** — if ViGEmBus is missing, the app offers to install it: the installer is bundled in the exe and its digital signature is checked before it runs.
-- **Russian and English** interface.
+- **Module theme of the Lodd standard** — a flat black background with no photo
+  and no glass, one yellow accent `#ffcc00`, the Jost font in weights 200 and
+  300, lower case everywhere. Worst text contrast 5.14:1 against the WCAG AA
+  4.5:1 minimum.
+- **A row of modules under the header** — source, profile, channels, gamepad,
+  mapping and driver with live numbers. Deviations such as "no signal" get their
+  own colour, and a click on a module jumps to its section.
+- **Numbered sections 01–06** instead of cards.
+- **The Mode 2 or Mode 1 preset** is picked from a list and applied with a
+  button. The line under it says that the rest of the mapping is reset.
+- **Deleting a profile** needs a second click within 3 seconds.
+- **A profile with unsaved edits** is marked "changed".
+- **Each axis value** shows as a number next to its bar, deadzone and expo
+  carry a percent sign.
+
+## Fixed
+
+- A gamepad start error used to print in section 01, off screen. It now sits
+  under the header.
+- With the driver installed, the driver dialog title still said the driver was
+  required.
+- A failed installer launch used to be reported as a download error.
 
 ## Install
 
-Download `RadioSetLink.exe` and run it — no Python or libraries needed. Profiles and settings live in `%APPDATA%\RadioSetLink`.
+Download `RadioSetLink.exe` and run it, no Python or libraries needed. Profiles
+and settings live in `%APPDATA%\RadioSetLink`.
 
-On first launch the app checks for the ViGEmBus driver and offers to install it if missing. Windows will ask for administrator rights.
+Windows SmartScreen may warn about an unknown publisher, because the build is
+not code signed. More info → Run anyway.
 
-Windows SmartScreen may warn about an unknown publisher — the build is not code signed. More info → Run anyway.
-
-**Requirements:** Windows 10 or 11, 64-bit, Microsoft Edge WebView2 Runtime (already part of Windows 11).
+Requires Windows 10 or 11, 64-bit, and the Microsoft Edge WebView2 Runtime,
+which Windows 11 already has.
