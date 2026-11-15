@@ -103,7 +103,7 @@ rsl/
   vigem.py      обращение к ViGEmClient.dll через ctypes
   driver.py     проверка, загрузка и установка ViGEmBus
   store.py      профили и настройки в %APPDATA%\RadioSetLink
-  ui/           интерфейс, стили, шрифт Jost, переводы, иконка
+  ui/           интерфейс, стили, шрифты Golos Text и PT Mono, переводы, иконка
   bin/          ViGEmClient.dll для x64 и x86
 tests/          автотесты, включая сквозной через XInput
 docs/           скриншоты, скрипт скриншотов, тексты для GitHub
@@ -171,14 +171,16 @@ build_exe.py    сборка в exe
 - Сборка не подписана сертификатом, поэтому Windows SmartScreen при первом
   запуске предупредит о неизвестном издателе.
 
-## Лицензии, шрифт и тема
+## Лицензии, шрифты и оформление
 
 Код под лицензией MIT, см. [LICENSE](LICENSE).
 
-Внешний вид — тема module из домашнего стандарта Lodd. В ней плоский чёрный
-фон, один жёлтый акцент `#ffcc00`, начертания 200 и 300 и строчные буквы.
-Шрифт [Jost](https://github.com/indestructible-type/Jost) лежит в
-`rsl/ui/fonts` под лицензией SIL OFL 1.1 (`rsl/ui/fonts/OFL.txt`).
+Оформление: ровный тёмно-серый фон, заголовки обычным весом и один цвет,
+`#ff6b4a`, которым помечено только отклонение — нет сигнала, ошибка, нет
+драйвера. Худший контраст текста 4.94:1 при норме WCAG AA 4.5:1. Шрифты
+[Golos Text](https://github.com/googlefonts/golos-text) и
+[PT Mono](https://fonts.google.com/specimen/PT+Mono) лежат в `rsl/ui/fonts`
+под лицензией SIL OFL 1.1 (`OFL-GolosText.txt`, `OFL-PTMono.txt`).
 
 `ViGEmClient.dll` взята из [vgamepad](https://github.com/yannbouteiller/vgamepad)
 (MIT, `rsl/bin/LICENSE-vgamepad`) и относится к проекту

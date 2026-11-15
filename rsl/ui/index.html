@@ -11,17 +11,13 @@
   <header class="top">
     <div class="topline">
       <div class="brand">
-        <svg class="sign" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true">
-          <rect class="s-line" x="3.5" y="3.5" width="17" height="17"/>
-          <rect class="s-accent" x="13" y="6" width="5" height="5"/>
-        </svg>
-        <span class="brand-name">radiosetlink</span>
+        <span class="brand-name">RadioSetLink</span>
         <span class="label" data-i18n="app.tagline"></span>
       </div>
       <div class="row">
         <div class="lang" role="group" data-i18n-label="lang.label">
-          <button type="button" class="switch" data-lang="ru">ru</button>
-          <button type="button" class="switch" data-lang="en">en</button>
+          <button type="button" class="switch" data-lang="ru">RU</button>
+          <button type="button" class="switch" data-lang="en">EN</button>
         </div>
         <button type="button" class="btn btn-primary" id="toggle" data-i18n="run.start"></button>
       </div>
@@ -30,64 +26,33 @@
 
     <nav class="modules">
       <a class="module" href="#source" id="modSource">
-        <svg class="sign" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true">
-          <path class="s-line s-on" d="M4.5 12a7.5 7.5 0 0 1 15 0"/>
-          <path class="s-line s-on" d="M8.5 12a3.5 3.5 0 0 1 7 0"/>
-          <rect class="s-fill" x="11" y="12" width="2" height="9"/>
-        </svg>
         <b data-i18n="mod.source"></b>
         <span class="fact" id="factSourceName"></span>
         <span class="fact state" id="factSourceState"></span>
       </a>
       <a class="module" href="#profile" id="modProfile">
-        <svg class="sign" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true">
-          <rect class="s-fill" x="3" y="5" width="18" height="2"/>
-          <rect class="s-fill s-on" x="3" y="11" width="12" height="2"/>
-          <rect class="s-fill" x="3" y="17" width="18" height="2"/>
-        </svg>
         <b data-i18n="mod.profile"></b>
         <span class="fact" id="factProfileName"></span>
         <span class="fact" id="factProfileCal"></span>
       </a>
       <a class="module" href="#inputs" id="modInputs">
-        <svg class="sign" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true">
-          <rect class="s-fill" x="4" y="12" width="2" height="9"/>
-          <rect class="s-fill s-on" x="9" y="6" width="2" height="15"/>
-          <rect class="s-fill" x="14" y="9" width="2" height="12"/>
-          <rect class="s-fill" x="19" y="15" width="2" height="6"/>
-        </svg>
         <b data-i18n="mod.inputs"></b>
         <span class="fact" id="factInputsAxes"></span>
         <span class="fact" id="factInputsButtons"></span>
       </a>
       <a class="module" href="#pad" id="modPad">
-        <svg class="sign" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true">
-          <rect class="s-line" x="3.5" y="3.5" width="17" height="17"/>
-          <circle class="s-fill s-on" cx="12" cy="12" r="4"/>
-        </svg>
         <b data-i18n="mod.pad"></b>
-        <span class="fact">xbox 360</span>
+        <span class="fact">Xbox 360</span>
         <span class="fact state" id="factPadState"></span>
       </a>
       <a class="module" href="#axes" id="modMap">
-        <svg class="sign" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true">
-          <rect class="s-fill" x="3" y="4" width="4" height="4"/>
-          <rect class="s-fill" x="3" y="16" width="4" height="4"/>
-          <rect class="s-fill" x="17" y="10" width="4" height="4"/>
-          <path class="s-line s-on" d="m7 6 10 6M7 18l10-6"/>
-        </svg>
         <b data-i18n="mod.map"></b>
         <span class="fact" id="factMapAxes"></span>
         <span class="fact" id="factMapButtons"></span>
       </a>
       <a class="module" href="#driver-dialog" id="modDriver">
-        <svg class="sign" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true">
-          <path class="s-line" d="M12 3v18"/>
-          <path class="s-line" d="M12 12 4 7"/>
-          <path class="s-line s-on" d="m12 12 8-5"/>
-        </svg>
         <b data-i18n="mod.driver"></b>
-        <span class="fact">vigembus</span>
+        <span class="fact">ViGEmBus</span>
         <span class="fact state" id="factDriverState"></span>
       </a>
     </nav>
@@ -186,7 +151,7 @@
         <div class="pad">
           <figure class="pad-part">
             <div class="trigger" id="trigL"><i></i></div>
-            <figcaption class="label">lt</figcaption>
+            <figcaption class="label">LT</figcaption>
           </figure>
           <figure class="pad-part">
             <div class="stick" id="stickL"><i></i></div>
@@ -198,7 +163,7 @@
           </figure>
           <figure class="pad-part">
             <div class="trigger" id="trigR"><i></i></div>
-            <figcaption class="label">rt</figcaption>
+            <figcaption class="label">RT</figcaption>
           </figure>
         </div>
         <div class="keys" id="keys"></div>
@@ -250,7 +215,7 @@
     </section>
 
     <footer class="foot">
-      <p class="small"><span>radiosetlink</span> <span class="num" id="version"></span> · <span data-i18n="foot.profiles"></span> <span class="mono">%appdata%\radiosetlink</span></p>
+      <p class="small"><span>RadioSetLink</span> <span class="num" id="version"></span> · <span data-i18n="foot.profiles"></span> <span class="mono">%appdata%\radiosetlink</span></p>
     </footer>
   </main>
 </div>
@@ -260,11 +225,11 @@
     <h2 class="h2" id="driverTitle" data-i18n="driver.title"></h2>
     <p class="prose" id="driverText"></p>
     <dl class="cond" id="driverCond">
-      <dt data-i18n="cond.requires">требует</dt>
+      <dt data-i18n="cond.requires">Требует</dt>
       <dd><span data-i18n="driver.requires"></span><span class="cond-check">start-process -verb runas</span></dd>
-      <dt data-i18n="cond.costs">стоит</dt>
+      <dt data-i18n="cond.costs">Стоит</dt>
       <dd><span data-i18n="driver.costs"></span><span class="cond-check" id="driverFile"></span></dd>
-      <dt data-i18n="cond.doesNot">не делает</dt>
+      <dt data-i18n="cond.doesNot">Не делает</dt>
       <dd><span data-i18n="driver.doesNot"></span><span class="cond-check">get-authenticodesignature</span></dd>
     </dl>
     <div class="meter uni" id="driverProgress" hidden><i></i></div>

@@ -1,7 +1,7 @@
 const AXES = ["lx", "ly", "rx", "ry", "lt", "rt"];
 const TRIGGERS = ["lt", "rt"];
 const BUTTONS = ["a", "b", "x", "y", "lb", "rb", "back", "start", "ls", "rs", "up", "down", "left", "right", "guide"];
-const KEY_LABELS = { a: "a", b: "b", x: "x", y: "y", lb: "lb", rb: "rb", back: "back", start: "start", ls: "ls", rs: "rs", guide: "guide" };
+const KEY_LABELS = { a: "A", b: "B", x: "X", y: "Y", lb: "LB", rb: "RB", back: "Back", start: "Start", ls: "LS", rs: "RS", guide: "Guide" };
 const ARROWS = { up: "M6 2 11 10H1z", down: "M6 10 1 2h10z", left: "M2 6 10 1v10z", right: "M10 6 2 11V1z" };
 const CONDITIONS = ["high", "mid", "low"];
 const BAUDS = [420000, 416666, 400000, 115200];
@@ -78,7 +78,8 @@ function setFact(id, text) {
   if (element.dataset.text === text) return;
   element.dataset.text = text;
   element.title = text;
-  element.replaceChildren(...text.split(/(\d+(?:[.,]\d+)?)/).filter(Boolean).map((part) => (/^\d/.test(part) ? node("span", { class: "num", text: part }) : document.createTextNode(part))));
+  // Only free-standing numbers go mono: digits inside a name (TX16S, PS4) stay in the text face.
+  element.replaceChildren(...text.split(/(?<![\p{L}\d])(\d+(?:[.,]\d+)?)(?![\p{L}\d])/u).map((part, i) => (i % 2 ? node("span", { class: "num", text: part }) : document.createTextNode(part))).filter((n) => n.textContent));
 }
 
 function inputLabel(id) {

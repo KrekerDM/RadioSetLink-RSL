@@ -1,30 +1,39 @@
 @font-face {
-  font-family: "Jost";
-  src: url("fonts/Jost.ttf") format("truetype");
-  font-weight: 100 900;
+  font-family: "Golos Text";
+  src: url("fonts/GolosText-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-display: block;
+}
+
+@font-face {
+  font-family: "PT Mono";
+  src: url("fonts/PTMono-Regular.ttf") format("truetype");
+  font-weight: 400;
   font-display: block;
 }
 
 :root {
   color-scheme: dark;
-  --ground: #000000;
-  --pane: #0e0e0e;
-  --raised: #181818;
-  --hover: #1f1f1f;
-  --hairline: #2a2a2a;
-  --text: #f2f2f2;
-  --text-soft: #b8b8b8;
-  --text-dim: #8a8a8a;
-  --accent: #ffcc00;
-  --accent-hover: #ffd633;
-  --on-accent: #140f00;
-  --bad: #ff5a2b;
-  --font: "Jost", "Segoe UI Variable Text", "Segoe UI", sans-serif;
-  --font-mono: "Cascadia Mono", Consolas, ui-monospace, monospace;
-  --t-index: 2.5rem;
+  --ground: #14171b;
+  --pane: #1b1f24;
+  --raised: #232830;
+  --hover: #2b313a;
+  --hairline: #2e343c;
+  --text: #e6e9ec;
+  --text-soft: #a8b0b8;
+  --text-dim: #8d96a0;
+  /* The one colour means a deviation: no signal, an error, a missing driver. */
+  --accent: #ff6b4a;
+  --on-accent: #130603;
+  --bad: var(--accent);
+  /* Hover on the light primary button; pure white jumps next to --text. */
+  --lift: #f4f6f8;
+  --font: "Golos Text", "Segoe UI Variable Text", "Segoe UI", sans-serif;
+  --font-mono: "PT Mono", "Cascadia Mono", Consolas, ui-monospace, monospace;
+  --t-index: 2.25rem;
   --t-h2: 1.875rem;
   --t-body: 1rem;
-  --t-small: 0.8125rem;
+  --t-small: 0.9375rem;
   --s-1: 0.25rem;
   --s-2: 0.5rem;
   --s-3: 0.75rem;
@@ -57,9 +66,8 @@ body {
   color: var(--text-soft);
   font-family: var(--font);
   font-size: var(--t-body);
-  font-weight: 300;
-  line-height: 1.5;
-  text-transform: lowercase;
+  font-weight: 400;
+  line-height: 1.45;
 }
 
 p,
@@ -72,7 +80,7 @@ dd {
 b,
 strong,
 th {
-  font-weight: 300;
+  font-weight: 400;
 }
 
 :focus-visible {
@@ -127,33 +135,6 @@ th {
   color: var(--text);
 }
 
-.sign {
-  display: block;
-  flex: none;
-}
-
-.sign .s-line {
-  fill: none;
-  stroke: var(--text-dim);
-  stroke-width: 1.5;
-}
-
-.sign .s-fill {
-  fill: var(--text-dim);
-}
-
-.sign .s-accent {
-  fill: var(--accent);
-}
-
-[data-on="true"] .sign .s-line.s-on {
-  stroke: var(--accent);
-}
-
-[data-on="true"] .sign .s-fill.s-on {
-  fill: var(--accent);
-}
-
 .modules {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
@@ -178,10 +159,6 @@ th {
   background: var(--hover);
 }
 
-.module .sign {
-  margin-bottom: var(--s-2);
-}
-
 .module b {
   color: var(--text);
 }
@@ -190,13 +167,13 @@ th {
   overflow: hidden;
   color: var(--text-dim);
   font-size: var(--t-small);
-  font-weight: 200;
+  font-weight: 400;
   white-space: nowrap;
   text-overflow: ellipsis;
 }
 
 .module[data-on="true"] .fact.state {
-  color: var(--accent);
+  color: var(--text);
 }
 
 .module[data-bad="true"] .fact.state {
@@ -221,7 +198,7 @@ th {
 
 .band {
   display: grid;
-  grid-template-columns: 10rem minmax(0, 1fr);
+  grid-template-columns: 13rem minmax(0, 1fr);
   gap: var(--s-8);
   padding-block: var(--s-8);
   border-top: 1px solid var(--hairline);
@@ -241,32 +218,34 @@ th {
   margin-bottom: var(--s-1);
   color: var(--text-dim);
   font-size: var(--t-index);
-  font-weight: 200;
+  font-weight: 400;
   line-height: 1;
+  letter-spacing: -0.02em;
 }
 
 .index b {
-  font-weight: 200;
-  color: var(--accent);
+  font-weight: 400;
+  color: var(--text-soft);
 }
 
 .label {
   color: var(--text-dim);
-  font-weight: 200;
+  font-weight: 400;
 }
 
 .small {
   color: var(--text-soft);
   font-size: var(--t-small);
-  font-weight: 200;
+  font-weight: 400;
 }
 
 .h2 {
   margin: 0;
   color: var(--text);
   font-size: var(--t-h2);
-  font-weight: 200;
-  line-height: 1.2;
+  font-weight: 400;
+  line-height: 1.12;
+  letter-spacing: -0.02em;
   text-wrap: balance;
 }
 
@@ -282,7 +261,6 @@ th {
 .num {
   font-family: var(--font-mono);
   font-variant-numeric: tabular-nums;
-  text-transform: none;
 }
 
 .mono {
@@ -302,7 +280,7 @@ th {
 
 .fields {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr));
   gap: var(--s-4) var(--s-6);
   max-width: 52rem;
 }
@@ -321,12 +299,7 @@ input[type="number"] {
   background: var(--pane);
   color: var(--text);
   font: inherit;
-  text-transform: inherit;
   transition: border-color 0.12s ease;
-}
-
-input[type="text"] {
-  text-transform: none;
 }
 
 input[type="number"] {
@@ -366,8 +339,8 @@ input[type="checkbox"]:hover {
 }
 
 input[type="checkbox"]:checked {
-  border-color: var(--accent);
-  background: var(--accent);
+  border-color: var(--text);
+  background: var(--text);
 }
 
 .btn {
@@ -380,27 +353,25 @@ input[type="checkbox"]:checked {
   color: var(--text);
   font: inherit;
   line-height: 1.2;
-  text-transform: lowercase;
   white-space: nowrap;
   cursor: pointer;
   transition: border-color 0.12s ease, color 0.12s ease, background-color 0.12s ease;
 }
 
 .btn:hover {
-  border-color: var(--accent);
-  color: var(--accent);
+  border-color: var(--text);
 }
 
 .btn-primary {
-  border-color: var(--accent);
-  background: var(--accent);
-  color: var(--on-accent);
+  border-color: var(--text);
+  background: var(--text);
+  color: var(--ground);
 }
 
 .btn-primary:hover {
-  border-color: var(--accent-hover);
-  background: var(--accent-hover);
-  color: var(--on-accent);
+  border-color: var(--lift);
+  background: var(--lift);
+  color: var(--ground);
 }
 
 .btn.compact {
@@ -409,8 +380,9 @@ input[type="checkbox"]:checked {
 }
 
 .btn[aria-pressed="true"] {
-  border-color: var(--accent);
-  color: var(--accent);
+  border-color: var(--text);
+  background: var(--text);
+  color: var(--ground);
 }
 
 .btn:disabled {
@@ -423,12 +395,11 @@ input[type="checkbox"]:checked {
   padding: 0;
   border: 0;
   background: none;
-  color: var(--text-dim);
+  color: var(--text-soft);
   font: inherit;
-  text-transform: lowercase;
   text-decoration: underline;
-  text-decoration-color: var(--hairline);
-  text-underline-offset: 0.2em;
+  text-decoration-color: var(--text-dim);
+  text-underline-offset: 4px;
   cursor: pointer;
   transition: color 0.12s ease;
 }
@@ -482,7 +453,7 @@ input[type="checkbox"]:checked {
 }
 
 .switch[aria-pressed="true"] {
-  color: var(--accent);
+  color: var(--text);
 }
 
 .empty {
@@ -516,7 +487,7 @@ input[type="checkbox"]:checked {
   bottom: 0;
   left: 50%;
   width: 0;
-  background: var(--accent);
+  background: var(--text);
 }
 
 .inputs {
@@ -546,7 +517,6 @@ input[type="checkbox"]:checked {
   font-size: var(--t-small);
   font-variant-numeric: tabular-nums;
   text-align: right;
-  text-transform: none;
 }
 
 .pad-view {
@@ -612,7 +582,7 @@ input[type="checkbox"]:checked {
   left: 50%;
   width: 8px;
   height: 8px;
-  background: var(--accent);
+  background: var(--text);
   transform: translate(-50%, -50%);
 }
 
@@ -622,7 +592,7 @@ input[type="checkbox"]:checked {
   bottom: 0;
   left: 0;
   height: 0;
-  background: var(--accent);
+  background: var(--text);
 }
 
 .keys {
@@ -648,9 +618,9 @@ input[type="checkbox"]:checked {
 }
 
 .key.on {
-  border-color: var(--accent);
-  background: var(--accent);
-  color: var(--on-accent);
+  border-color: var(--text);
+  background: var(--text);
+  color: var(--ground);
 }
 
 .scroll {
@@ -667,7 +637,7 @@ input[type="checkbox"]:checked {
   border-bottom: 1px solid var(--hairline);
   color: var(--text-dim);
   font-size: var(--t-small);
-  font-weight: 200;
+  font-weight: 400;
   text-align: left;
   white-space: nowrap;
 }
@@ -682,11 +652,11 @@ input[type="checkbox"]:checked {
 
 .table td:first-child {
   color: var(--text-soft);
-  font-weight: 200;
+  font-weight: 400;
 }
 
 .table select {
-  min-width: 8rem;
+  min-width: 10rem;
 }
 
 .table input[type="number"] {
@@ -719,8 +689,8 @@ input[type="checkbox"]:checked {
 }
 
 .ind.on {
-  border-color: var(--accent);
-  background: var(--accent);
+  border-color: var(--text);
+  background: var(--text);
 }
 
 .foot {
@@ -735,7 +705,7 @@ input[type="checkbox"]:checked {
   display: grid;
   place-items: center;
   padding: var(--s-6);
-  background: rgba(0, 0, 0, 0.72);
+  background: rgba(20, 23, 27, 0.7);
 }
 
 .overlay > .dialog { box-shadow: 0 24px 64px rgba(0, 0, 0, 0.6); }
@@ -760,8 +730,9 @@ input[type="checkbox"]:checked {
 }
 
 .cond > dt {
-  color: var(--accent);
-  font-weight: 200;
+  color: var(--text-dim);
+  font-family: var(--font-mono);
+  font-size: var(--t-small);
 }
 
 .cond > dd {
@@ -775,7 +746,6 @@ input[type="checkbox"]:checked {
   color: var(--text-dim);
   font-family: var(--font-mono);
   font-size: var(--t-small);
-  text-transform: none;
 }
 
 @media (max-width: 900px) {

@@ -1,29 +1,21 @@
-Новый вид и исправления по итогам проверки. Логика работы с пультом и драйвером
-не менялась, профили из 1.0.0 подхватываются.
+Новое оформление. Работа с пультом, драйвером и профилями не менялась,
+профили из 1.1.0 подхватываются.
 
 ## Изменено
 
-- **Тема module из стандарта Lodd** — плоский чёрный фон без фотографии и
-  стекла, один жёлтый акцент `#ffcc00`, шрифт Jost в начертаниях 200 и 300,
-  строчные буквы. Худший контраст текста 5.14:1 при норме WCAG AA 4.5:1.
-- **Ряд модулей под шапкой** — источник, профиль, каналы, геймпад, раскладка и
-  драйвер с текущими числами. Отклонение вроде «нет сигнала» помечено отдельным
-  цветом, щелчок по модулю ведёт к его разделу.
-- **Разделы с номерами 01–06** вместо карточек.
-- **Шаблон Mode 2 или Mode 1** выбирается в списке и применяется кнопкой. Под
-  списком сказано, что остальная раскладка при этом сбрасывается.
-- **Удаление профиля** просит второе нажатие в течение 3 секунд.
-- **Профиль с несохранёнными правками** помечен словом «изменён».
-- **Значение каждой оси** видно числом рядом со столбиком, у мёртвой зоны и
-  экспо стоит знак процента.
+- Фон ровный тёмно-серый вместо чёрного, заголовки крупные и обычного веса.
+- Шрифты Golos Text и PT Mono вместо Jost и Cascadia Mono, оба вшиты в
+  программу.
+- Жёлтого акцента больше нет. Цвет остался один, коралловый, и помечает только
+  отклонение: нет сигнала, ошибку, отсутствующий драйвер. Включённое состояние
+  и нажатые кнопки показаны светлой заливкой.
+- Надписи набраны обычным регистром, а не строчными. Кнопки геймпада подписаны
+  A, B, X, Y, LB и RB, как на контроллере.
+- В ряду модулей под шапкой нет значков, остались названия и числа.
+- Цифры внутри названий вроде TX16S или PS4 Controller набраны тем же шрифтом,
+  что и буквы. Моноширинным шрифтом идут только отдельные числа.
 
-## Исправлено
-
-- Ошибка запуска геймпада раньше печаталась в разделе 01, вне экрана. Теперь
-  она стоит под шапкой.
-- Окно драйвера при установленном драйвере писало в заголовке, что драйвер
-  нужен.
-- Сбой запуска установщика раньше выдавался за ошибку загрузки.
+Худший контраст текста 4.94:1 при норме WCAG AA 4.5:1.
 
 ## Установка
 
@@ -39,33 +31,24 @@ Windows 11 он уже есть.
 ---
 ## English
 
-A new look and fixes from a review pass. Radio and driver handling did not
-change, and profiles from 1.0.0 carry over.
+A new look. Radio, driver and profile handling did not change, and profiles
+from 1.1.0 carry over.
 
 ## Changed
 
-- **Module theme of the Lodd standard** — a flat black background with no photo
-  and no glass, one yellow accent `#ffcc00`, the Jost font in weights 200 and
-  300, lower case everywhere. Worst text contrast 5.14:1 against the WCAG AA
-  4.5:1 minimum.
-- **A row of modules under the header** — source, profile, channels, gamepad,
-  mapping and driver with live numbers. Deviations such as "no signal" get their
-  own colour, and a click on a module jumps to its section.
-- **Numbered sections 01–06** instead of cards.
-- **The Mode 2 or Mode 1 preset** is picked from a list and applied with a
-  button. The line under it says that the rest of the mapping is reset.
-- **Deleting a profile** needs a second click within 3 seconds.
-- **A profile with unsaved edits** is marked "changed".
-- **Each axis value** shows as a number next to its bar, deadzone and expo
-  carry a percent sign.
+- A flat dark grey background instead of black, with large headings in regular
+  weight.
+- Golos Text and PT Mono instead of Jost and Cascadia Mono, both bundled.
+- The yellow accent is gone. One colour is left, coral, and it marks only a
+  deviation: no signal, an error, a missing driver. An enabled state and pressed
+  buttons take a light fill.
+- Text keeps its normal case instead of lower case everywhere. The gamepad
+  buttons read A, B, X, Y, LB and RB, as on the controller.
+- The module row under the header has no icons, only names and numbers.
+- Digits inside names such as TX16S or PS4 Controller use the same face as the
+  letters. Only free-standing numbers are set in the monospaced face.
 
-## Fixed
-
-- A gamepad start error used to print in section 01, off screen. It now sits
-  under the header.
-- With the driver installed, the driver dialog title still said the driver was
-  required.
-- A failed installer launch used to be reported as a download error.
+Worst text contrast 4.94:1 against the WCAG AA 4.5:1 minimum.
 
 ## Install
 
