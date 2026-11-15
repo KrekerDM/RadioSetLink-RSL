@@ -16,7 +16,7 @@ const I18N = {
     "fact.src.wait": "ждём устройство",
     "fact.src.nosignal": "нет сигнала",
     "fact.src.live": "сигнал есть",
-    "fact.cal": "откалибровано {n}",
+    "fact.cal": "калибровка {n}",
     "fact.pad.on": "включён",
     "fact.pad.off": "выключен",
     "fact.pad.error": "выключен из-за ошибки",

@@ -6,9 +6,12 @@
 - Фон ровный тёмно-серый вместо чёрного, заголовки крупные и обычного веса.
 - Шрифты Golos Text и PT Mono вместо Jost и Cascadia Mono, оба вшиты в
   программу.
-- Жёлтого акцента больше нет. Цвет остался один, коралловый, и помечает только
-  отклонение: нет сигнала, ошибку, отсутствующий драйвер. Включённое состояние
-  и нажатые кнопки показаны светлой заливкой.
+- Жёлтого акцента больше нет. Цвет остался один, коралловый: им помечены нет
+  сигнала, ошибка, отсутствующий драйвер и режимы «Слушаю…» и калибровки, пока
+  они перехватывают ввод. Нажатые кнопки геймпада отмечены рамкой, светлая
+  заливка осталась у главной кнопки и включённых галочек.
+- Кнопки набраны моноширинным PT Mono. В окне уже 1240 пикселей подписи
+  разделов встают над таблицами, и таблица осей не уходит вбок.
 - Надписи набраны обычным регистром, а не строчными. Кнопки геймпада подписаны
   A, B, X, Y, LB и RB, как на контроллере.
 - В ряду модулей под шапкой нет значков, остались названия и числа.
@@ -39,9 +42,12 @@ from 1.1.0 carry over.
 - A flat dark grey background instead of black, with large headings in regular
   weight.
 - Golos Text and PT Mono instead of Jost and Cascadia Mono, both bundled.
-- The yellow accent is gone. One colour is left, coral, and it marks only a
-  deviation: no signal, an error, a missing driver. An enabled state and pressed
-  buttons take a light fill.
+- The yellow accent is gone. One colour is left, coral, and it marks no signal,
+  an error, a missing driver, and the listening and calibration modes while they
+  hold the input. Pressed gamepad buttons get a frame; the light fill is left to
+  the main button and ticked boxes.
+- Buttons are set in PT Mono. Below 1240 pixels the section labels move above
+  the tables, so the axes table no longer scrolls sideways.
 - Text keeps its normal case instead of lower case everywhere. The gamepad
   buttons read A, B, X, Y, LB and RB, as on the controller.
 - The module row under the header has no icons, only names and numbers.

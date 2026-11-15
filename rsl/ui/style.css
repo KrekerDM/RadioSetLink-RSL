@@ -22,7 +22,8 @@
   --text: #e6e9ec;
   --text-soft: #a8b0b8;
   --text-dim: #8d96a0;
-  /* The one colour means a deviation: no signal, an error, a missing driver. */
+  /* The one colour means attention: no signal, an error, a missing driver,
+     a capture mode holding the input. */
   --accent: #ff6b4a;
   --on-accent: #130603;
   --bad: var(--accent);
@@ -144,7 +145,7 @@ th {
   display: flex;
   flex-direction: column;
   gap: 0;
-  padding: var(--s-3) var(--s-6) var(--s-4);
+  padding: var(--s-3) var(--s-4) var(--s-4);
   border-right: 1px solid var(--hairline);
   color: inherit;
   text-decoration: none;
@@ -155,8 +156,9 @@ th {
   border-right: 0;
 }
 
+/* --raised, not --hover: the dim facts on --hover are 4.37:1. */
 .module:hover {
-  background: var(--hover);
+  background: var(--raised);
 }
 
 .module b {
@@ -352,6 +354,7 @@ input[type="checkbox"]:checked {
   background: transparent;
   color: var(--text);
   font: inherit;
+  font-family: var(--font-mono);
   line-height: 1.2;
   white-space: nowrap;
   cursor: pointer;
@@ -379,10 +382,12 @@ input[type="checkbox"]:checked {
   font-size: var(--t-small);
 }
 
+/* Pressed means a capture mode that takes over the input until it is
+   pressed again, so it carries the one colour, not the main-action fill. */
 .btn[aria-pressed="true"] {
-  border-color: var(--text);
-  background: var(--text);
-  color: var(--ground);
+  border-color: var(--accent);
+  background: transparent;
+  color: var(--accent);
 }
 
 .btn:disabled {
@@ -619,8 +624,8 @@ input[type="checkbox"]:checked {
 
 .key.on {
   border-color: var(--text);
-  background: var(--text);
-  color: var(--ground);
+  background: var(--raised);
+  color: var(--text);
 }
 
 .scroll {
@@ -748,7 +753,7 @@ input[type="checkbox"]:checked {
   font-size: var(--t-small);
 }
 
-@media (max-width: 900px) {
+@media (max-width: 1240px) {
   .band {
     grid-template-columns: 1fr;
     gap: var(--s-3);

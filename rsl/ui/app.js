@@ -399,7 +399,7 @@ function renderModules(state) {
   });
 
   const driver = state.driver ?? { stage: "installed", progress: 0 };
-  setModule("modDriver", driver.stage === "installed", driver.stage === "failed", {
+  setModule("modDriver", driver.stage === "installed", driver.stage === "failed" || driver.stage === "missing", {
     factDriverState: t(`fact.driver.${driver.stage}`, { p: Math.round(driver.progress * 100) }),
   });
 }
